@@ -24,7 +24,7 @@ void i2c_lcd_sendDataByte(char input){
 		
 		input  = 01010011
 		0xf0   = 11110000
-				---------- &
+			---------- &
 		Result = 01010000
 	*/
 	byteHigh = (input & 0xf0);
@@ -39,7 +39,7 @@ void i2c_lcd_sendDataByte(char input){
 
 		input  = 00110000
 		0xf0   = 11110000
-				---------- &
+			---------- &
 		Result = 00110000
 	*/
 	byteLow = ((input<<4) & 0xf0);
@@ -56,7 +56,7 @@ void i2c_lcd_sendDataByte(char input){
 		Looking at the TI PCF8574 datasheet (page 12 section 8.3.2), the I2C data bytes are interpreted as:
 
 		bit 7 | bit 6 | bit 5 | bit 4 | bit 3 | bit 2 | bit 1 | bit 0	
-		P7 	  | P6    | P5    | P4    | P3    | P2    | P1    | P0
+		P7    | P6    | P5    | P4    | P3    | P2    | P1    | P0
 
 		As you can see this lines up with how we are formatting the bytes and the physical pin connections.
 
