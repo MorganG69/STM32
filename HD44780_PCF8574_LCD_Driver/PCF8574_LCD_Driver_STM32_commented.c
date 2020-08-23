@@ -114,7 +114,6 @@ void i2c_lcd_init(void){
 	HAL_Delay(1);
 	i2c_lcd_sendCmdByte(0x01);
 	HAL_Delay(1);
-	HAL_Delay(1);
 	i2c_lcd_sendCmdByte(0x06);
 	HAL_Delay(1);
 	i2c_lcd_sendCmdByte(0x0C);
