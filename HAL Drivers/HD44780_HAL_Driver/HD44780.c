@@ -1,5 +1,3 @@
-#define I2C_LCD_ADDRESS 0x4E
-
 void i2c_lcd_sendDataByte(char input){
 	uint8_t i2cBuf[4];
 	char byteLow;
