@@ -73,3 +73,10 @@ void i2c_lcd_putCursor(uint8_t row, uint8_t col){
 		return;
 	}
 }
+
+// Example usage.
+int main(void){
+ 	i2c_lcd_init();
+  	i2c_lcd_putCursor(0,0);
+  	i2c_lcd_sendString("Hello, World!");
+}
