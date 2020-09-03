@@ -24,13 +24,14 @@ void AD9833_Set_Output(int freq, int wave){
 	uint32_t outputFreq;
 	uint16_t outputFreqLOW;
 	uint16_t outputFreqHIGH;
-	uint16_t data[5];
+	uint16_t data[10];
+	HAL_StatusTypeDef err;
 
 	// Taken from application note AN-1070 page 3.
 	switch(wave){
 		case 0:
-			data[0] = 0x2100; // Enable reset to clear the registers before writing.
-			data[4] = 0x2000; // Disable reset.
+			data[0] = 0x2100;
+			data[4] = 0x2000;
 			break;
 		case 1:
 			data[0] = 0x2102;
@@ -40,10 +41,11 @@ void AD9833_Set_Output(int freq, int wave){
 			data[0] = 0x2128;
 			data[4] = 0x2028;
 			break;
+		default:
+			return;
 	}
 
-  	data[3] = 0xC000; // This is used to set the phase of the output. Zero for now.
-  	
+  	data[3] = 0xC000;
 
 	// This formula is given in the datasheet to create a 32 bit number. This needs to be manipulated to make the 28 bit word.
 	outputFreq = (freq * pow(2, 28)) / AD9833_REF_FREQ;
@@ -66,9 +68,38 @@ void AD9833_Set_Output(int freq, int wave){
 
 	// Transmit 5 16 bit words from the data buffer.
 	// ARGS: SPI device handle, uint8 pointer to data buffer, number of words to transmit, timeout.
-  	HAL_SPI_Transmit(&hspi2, (uint8_t *)(data), 5, 100);
+  	err = HAL_SPI_Transmit(&hspi2, (uint8_t *)(data), 5, 100);
+  	if(err != HAL_OK){
+  		printString("SPI tx error\r\n");
+  	}
 
   	// Chip select off.
+  	HAL_GPIO_WritePin(AD9833_CS_GPIO_Port, AD9833_CS_Pin, GPIO_PIN_SET);
+}
+
+void AD9833_Set_Waveform(int wave){
+	uint16_t data[0];
+	HAL_StatusTypeDef err;
+
+	switch(wave){
+		case 0:
+			data[0] = 0x2000;
+			break;
+		case 1:
+			data[0] = 0x2002;
+			break;
+		case 2:
+			data[0] = 0x2028;
+			break;
+		default:
+			return;
+	}
+
+	HAL_GPIO_WritePin(AD9833_CS_GPIO_Port, AD9833_CS_Pin, GPIO_PIN_RESET);
+	err = HAL_SPI_Transmit(&hspi2, (uint8_t *)(data), 1, 100);
+	if(err != HAL_OK){
+		printString("SPI tx error\r\n");
+	}
   	HAL_GPIO_WritePin(AD9833_CS_GPIO_Port, AD9833_CS_Pin, GPIO_PIN_SET);
 }
 
