@@ -75,3 +75,43 @@ void TIM21_IRQHandler(void)
   // Re enable the counter
   TIM21->CR1 |= 1<<0;
 }
+
+static void TIM2_Frequency_Counter_Init(void){
+
+	uint32_t inputPin = LL_GPIO_PIN_0;
+	/* Peripheral clock enable */
+	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM2);
+	LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOA);
+
+	// Same as timer 21.
+	TIM2->PSC = 0;
+	TIM2->CR1 = 0;
+
+	TIM2->SMCR = 0;
+	// Set the external clock enable bit to 1 in the SMCR reg.
+	TIM2->SMCR |= (0x4<<12);
+	// Set the slave mode selection bits to 101 for gated mode.
+	TIM2->SMCR |= 0x05;
+
+	// Set the period to maximum.
+	TIM2->ARR = 65535;
+
+	// Set the mode bits of PA0 to 10 which is alternate function mode.
+	LL_GPIO_SetPinMode(GPIOA, inputPin, LL_GPIO_MODE_ALTERNATE);
+	// Set output type to push / pull.
+	LL_GPIO_SetPinOutputType(GPIOA, inputPin, LL_GPIO_OUTPUT_PUSHPULL);
+	// Set output speed low.
+	LL_GPIO_SetPinSpeed(GPIOA, inputPin, LL_GPIO_SPEED_FREQ_LOW);
+	// Set the pull up/down register.
+	LL_GPIO_SetPinPull(GPIOA, inputPin, LL_GPIO_PULL_NO);
+	/*
+	 * Set the alternate function register.
+	 * The alternate function I need to use is AF5. (datasheet page 45 table 16)
+	 * There are two AF registers, a high and a low.
+	 */
+	LL_GPIO_SetAFPin_0_7(GPIOA, inputPin, LL_GPIO_AF_5);
+
+
+	// Enable the counter.
+	TIM2->CR1 |= (1u<<0);
+}
