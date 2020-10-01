@@ -97,26 +97,26 @@ void i2c_lcd_sendCmdByte(char input){
 void i2c_lcd_init(void){
 
 	// This first part sets the LCD to 4 bit mode, this is described on the wiki page.
-	HAL_Delay(50);
-	i2c_lcd_sendCmdByte(0x30);
-	HAL_Delay(5);
-	i2c_lcd_sendCmdByte(0x30);
-	HAL_Delay(5);
-	i2c_lcd_sendCmdByte(0x30);
-	HAL_Delay(5);
-	i2c_lcd_sendCmdByte(0x20);
-	HAL_Delay(5);
+	LL_mDelay(50);
+	i2c_lcd_sendByte(CMD, 0x30);
+	LL_mDelay(5);
+	i2c_lcd_sendByte(CMD, 0x30);
+	LL_mDelay(5);
+	i2c_lcd_sendByte(CMD, 0x30);
+	LL_mDelay(5);
+	i2c_lcd_sendByte(CMD, 0x20);
+	LL_mDelay(5);
 
 	// Display initialisation, taken from datasheet and examples online.
-	i2c_lcd_sendCmdByte(0x28);
-	HAL_Delay(1);
-	i2c_lcd_sendCmdByte(0x08);
-	HAL_Delay(1);
-	i2c_lcd_sendCmdByte(0x01);
-	HAL_Delay(1);
-	i2c_lcd_sendCmdByte(0x06);
-	HAL_Delay(1);
-	i2c_lcd_sendCmdByte(0x0C);
+	i2c_lcd_sendByte(CMD, 0x28);
+	LL_mDelay(1);
+	i2c_lcd_sendByte(CMD, 0x08);
+	LL_mDelay(1);
+	i2c_lcd_sendByte(CMD, 0x01);
+	LL_mDelay(1);
+	i2c_lcd_sendByte(CMD, 0x06);
+	LL_mDelay(1);
+	i2c_lcd_sendByte(CMD, 0x0C);
 }
 
 // Loops through the string and sends it using the data transmission function.
