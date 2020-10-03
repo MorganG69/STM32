@@ -1,11 +1,9 @@
 void i2cTransmit(I2C_TypeDef I2Cx, uint8_t devAddress, uint8_t *data, uint16_t size)
-{
-
-	while(LL_I2C_IsActiveFlag_BUSY(I2Cx) == 1){} // Wait for the bus to be free.
-
+{	
 	uint8_t *dataPtr = data;
 	volatile uint16_t XferCount = size;
-	uint16_t XferSize = XferCount;
+		
+	while(LL_I2C_IsActiveFlag_BUSY(I2Cx) == 1){} // Wait for the bus to be free.
 
 	LL_I2C_GenerateStartCondition(I2Cx);
 
@@ -21,14 +19,13 @@ void i2cTransmit(I2C_TypeDef I2Cx, uint8_t devAddress, uint8_t *data, uint16_t s
 
 	while(XferCount > 0U)
 	{
-		while(LL_I2C_IsActiveFlag_TXE(I2Cx) != 1){} // Wait for the data register to be empty
+		while(LL_I2C_IsActiveFlag_TXE(I2Cx) != 1){} // Wait for the data register to be empty	
 		
 		// Fill the data register. Device automatically transmits it.
 		I2Cx->DR = *dataPtr; 
 		dataPtr++;
 		XferCount--;
-		XferSize--;
-
+		
 		// Wait for the byte transfer complete flag to be set.
 		while(LL_I2C_IsActiveFlag_BTF(I2Cx) != 1){}
 	}
