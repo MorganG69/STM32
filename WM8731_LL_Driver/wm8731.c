@@ -18,9 +18,9 @@ void wm8731_bypass_enable(wm8731_handle w)
 	wm8731_ctl_transmit(w->i2cHandle, WM8731_POWER_CTL, w->power);
 }
 
-wm8731_handle *wm8731_init(I2C_TypeDef I2Cx)
+wm8731_handle wm8731_init(I2C_TypeDef I2Cx)
 {
-	wm8731_handle *temp;
+	wm8731_handle temp;
 
 	temp->i2cHandle = I2Cx;
 
