@@ -32,6 +32,7 @@ i2c_status_t i2cTransmit(I2C_TypeDef I2Cx, uint8_t devAddress, uint8_t *data, ui
 	LL_I2C_GenerateStartCondition(I2Cx);
 
 	// Wait for the SB flag to be set.
+	// This is set when a start condition is successful.
 	while((LL_I2C_IsActiveFlag_SB(I2Cx) != 1) && (retryCount < timeOut))retryCount++;
 	if(retryCount >= timeOut) return I2C_FAULT_SB;
 	retryCount = 0;
